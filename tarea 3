@@ -22,7 +22,7 @@ def activos(data, month):
 					            else:
 					               	usuariosAdict[temp3]=1
 				else:
-					break
+					continue
 	for e,r in usuariosAdict.items():	
 		if r <= 3:	
 			del usuariosAdict[e]
@@ -31,9 +31,10 @@ def activos(data, month):
 
 
 
-def likes(data, month):
+def likes(data, month, name):
 
 	usuariosLdict = dict()
+	m = month
 
 	for i in data:
 		for x,y in i.items():
@@ -50,12 +51,15 @@ def likes(data, month):
 					            else:
 					               	usuariosLdict[temp3]=1
 				else:
-					break				             
+					continue
+	print "En "+name+" hubo una cantidad de "+str(posts(data, m))+" con un total de "+str(sum(usuariosLdict.values()))+" likes."			             
 	return usuariosLdict
 
-def comments(data, month):
+def comments(data, month, name):
 
 	usuariosCdict = dict()
+	m = month
+
 	for i in data:
 		for x,y in i.items():
 			if x=="created_time":
@@ -73,7 +77,8 @@ def comments(data, month):
 								else:
 									usuariosCdict[x[1]]=1
 				else:
-					break
+					continue
+	print "En "+name+" hubo una cantidad de "+str(posts(data, m))+" con un total de "+str(sum(usuariosCdict.values()))+" comentarios."
 	return usuariosCdict
 
 
@@ -111,8 +116,6 @@ def posts(data, month):
 	return posts
 
 
-
-
 print "Seleccione dos paginas"
 print "........................"
 print "1.- UTFSM"
@@ -124,6 +127,7 @@ print "5.- UPLA"
 p1 = raw_input("Ingrese pagina 1: ")
 p2 = raw_input("ingrese pagina 2: ")
 
+print "........................"
 print "Que desea comparar?"
 print "........................"
 print "1.- Likes"
@@ -162,19 +166,17 @@ with open(p2+".json") as of:
         data1=loads(of.readline())
 
 if n=='1':
-	pag1 = likes(data, month)
-	pag2 = likes(data1, month)
+	pag1 = likes(data, month, p1)
+	pag2 = likes(data1, month, p2)
 	grapho = creargrapho(pag1, p1, pag2, p2, 1)
 
+
 if n=='2':
-	pag1 = comments(data, month)
-	pag2 = comments(data1, month)
+	pag1 = comments(data, month, p1)
+	pag2 = comments(data1, month, p2)
 	grapho = creargrapho(pag1, p1, pag2, p2, 2)
 
 if n=='3':
 	pag1 = activos(data, month)
 	pag2 = activos(data1, month)
-grapho = creargrapho(pag1, p1, pag2, p2, 3)
-
-print "posts en el ultimo mes de ", p1, " : ", posts(data,month)
-print "posts en el ultimo mes de ", p1, " : ", posts(data1,month)
+	grapho = creargrapho(pag1, p1, pag2, p2, 3)
